@@ -18,9 +18,9 @@ export default function JobList () {
 
     useEffect(() => { 
         
-        fetch('/api/jobs')
+        fetch('/api/jobList')
         .then(response => response.json())
-        .then(data => setJobs(data))
+        .then(data => setJobs(data.data))
         .catch(error => console.log(error));
     }, []);
 
