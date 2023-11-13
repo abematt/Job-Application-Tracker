@@ -11,7 +11,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       .find({})
       .toArray();
 
-    console.log(jobs,"hi");
+
     res.json(jobs);
     
   } catch (err) {

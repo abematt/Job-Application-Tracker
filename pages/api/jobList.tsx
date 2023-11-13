@@ -4,7 +4,7 @@ import Job from "../../app/models/Job";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   const { method } = req;
-  console.log(method)
+
   await dbConnect();
 
   switch (method) {
@@ -19,11 +19,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       break;
     case "POST":
       try {
-        console.log("here")
-        console.log(req.body)
+
         const job = await Job.create(req.body);
-        
-        console.log("i got here")
+
 
         res.status(201).json({ success: true, data: job });
       } catch (error) {

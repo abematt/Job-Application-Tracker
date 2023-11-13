@@ -13,16 +13,20 @@ import {
   } from '@chakra-ui/react'
 import React, { useEffect, useState } from 'react';
 
-export default function JobList () {
-    const [jobs,setJobs] = useState<any[]>([]);
+export default function JobList ({ jobs }) {
+    // const [jobs,setJobs] = useState<any[]>([]);
 
-    useEffect(() => { 
+    // useEffect(() => { 
         
-        fetch('/api/jobList')
-        .then(response => response.json())
-        .then(data => setJobs(data.data))
-        .catch(error => console.log(error));
-    }, []);
+    //     fetch('/api/jobList')
+    //     .then(response => response.json())
+    //     .then(data => setJobs(data.data))
+    //     .catch(error => console.log(error));
+    // }, []);
+
+    useEffect(() => {
+      console.log(jobs,"Update state in joblist component"); // Log the jobs prop
+    }, [jobs]);
 
       return (
           <TableContainer maxWidth="50%" >
@@ -40,7 +44,16 @@ export default function JobList () {
                 </Tr>
               </Thead>
               <Tbody>
-                {jobs.map((job) => (
+                
+                {jobs.map((job:{
+                  _id: string    
+                  companyName: string
+                  jobPosition: string
+                  dateApplied: string
+                  status: string
+                  responseDate: string
+                  daysSince: number
+                  notes: string}) => (
                 <Tr key={job._id}>
                     <Td>{job.companyName}</Td>
                     <Td>{job.jobPosition}</Td>

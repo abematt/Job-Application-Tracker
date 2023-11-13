@@ -15,7 +15,7 @@ import { Button, ButtonGroup } from '@chakra-ui/react'
 
 import AddJob from './jobAddForm'
 
-export default function ModalButton() 
+export default function ModalButton( {addJob} ) 
 {
     // const { isOpen, onOpen, onClose } = useDisclosure();
     
@@ -42,17 +42,17 @@ export default function ModalButton()
             <Modal isOpen={isOpen} onClose={onClose}>
               <ModalOverlay />
               <ModalContent>
-                <ModalHeader>Add Job</ModalHeader>
+                {/* <ModalHeader>Add Job</ModalHeader> */}
                 <ModalCloseButton />
                 <ModalBody>
-                  <AddJob/>
+                  <AddJob addJob={addJob}/>
                 </ModalBody>
       
                 <ModalFooter>
-                  <Button colorScheme="green" variant='solid' mr={3}>Add Job</Button>
-                  <Button colorScheme='red' onClick={onClose}>
-                    Close
-                  </Button>
+                  {/* <Button colorScheme="green" variant='solid' mr={3}>Add Job</Button> */}
+                  {/* <Button colorScheme='red' onClick={onClose}> */}
+                    {/* Close
+                  </Button> */}
                 </ModalFooter>
               </ModalContent>
             </Modal>
