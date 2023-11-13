@@ -28,6 +28,20 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         res.status(400).json({ success: false });
       }
       break;
+    case "DELETE":
+      try {
+        const { id } = req.body;
+        const job = await Job.findByIdAndDelete(id);
+
+        if (!job) {
+          return res.status(400).json({ success: false });
+        }
+
+        res.status(200).json({ success: true, data: {} });
+        
+      } catch(error) {
+        res.status(400).json({ success: false });
+      }
     default:
       res.status(400).json({ success: false });
       break;

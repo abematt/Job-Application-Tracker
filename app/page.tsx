@@ -37,6 +37,11 @@ export default function Home() {
     // setJobs(jobs.concat(newJob));
   };
   
+  const updateJob = (jobs) => {
+    setJobs(jobs);
+  };
+
+  
   return (
     <body>
       <Providers>
@@ -51,7 +56,7 @@ export default function Home() {
             </Tabs>
           </Flex>
           <Flex justify="center">
-            <JobList jobs={jobs}/>
+            <JobList jobs={jobs} setJobs={setJobs}/>
           </Flex>
         </Flex>
       </Providers>
