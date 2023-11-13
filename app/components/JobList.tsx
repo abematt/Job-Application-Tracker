@@ -25,8 +25,8 @@ export default function JobList () {
     }, []);
 
       return (
-          <TableContainer maxWidth="75%" >
-            <Table colorScheme="messenger" variant='simple' size="lg">
+          <TableContainer maxWidth="50%" >
+            <Table colorScheme="messenger" variant='simple' size="sm">
               <TableCaption >Job Application Tracking</TableCaption>
               <Thead>
                 <Tr>
