@@ -1,24 +1,13 @@
 'use client'
 
+import { Flex, } from '@chakra-ui/react'
+import { Tabs, TabList, Tab} from '@chakra-ui/react'
+
 import { Providers } from './providers';
-import JobList from './components/JobList'
-import { Flex, Spacer } from '@chakra-ui/react'
-import { Tabs, TabList, TabPanels, Tab, TabPanel } from '@chakra-ui/react'
-import ModalButton from './components/ModalAddButton'
 import { useEffect, useState } from 'react';
-import {
-  Table,
-  Thead,
-  Tbody,
-  Tfoot,
-  Tr,
-  Th,
-  Td,
-  TableCaption,
-  TableContainer,
-} from '@chakra-ui/react'
 
-
+import JobList from './components/JobList'
+import ModalButton from './components/ModalAddButton'
 
 export default function Home() {
   const [jobs, setJobs] = useState([]);
@@ -31,17 +20,10 @@ export default function Home() {
     .catch(error => console.log(error));
   }, []);
 
-
   const addJob = (newJob) => {
     setJobs(prevJobs => [...prevJobs, newJob]);
-    // setJobs(jobs.concat(newJob));
-  };
-  
-  const updateJob = (jobs) => {
-    setJobs(jobs);
   };
 
-  
   return (
     <body>
       <Providers>

@@ -11,18 +11,35 @@ import {
     TableCaption,
     TableContainer,
   } from '@chakra-ui/react'
-import React, { useEffect, useState } from 'react';
+
 import {DeleteIcon} from '@chakra-ui/icons';
 import { IconButton } from "@chakra-ui/react";
 import { Select } from '@chakra-ui/react'
-import { Box } from "@chakra-ui/react";
-import { useStyleConfig } from "@chakra-ui/react";
 
-
+import React, { useEffect, useState } from 'react';
 
 export default function JobList ({ jobs ,setJobs}) {
 
-    const handleSubmit = async (job) => {
+    // Update API call
+    const handleUpdateStatus = async (id,status) => {
+
+        const response = await fetch('/api/jobList', {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({id: id, status: status}),
+        });
+
+        if (!response.ok){
+          throw new Error('Error updating Job');
+        }
+
+        const updatedJob = await response.json();
+        setJobs(jobs.map(job => job._id === id ? { ...job, status: status } : job));
+        // addJob(updatedJob.data);
+    }
+
+    // Delete API call
+    const handleDelete = async (job) => {
 
         const response = await fetch('/api/jobList', {
             method: 'DELETE',
@@ -46,13 +63,28 @@ export default function JobList ({ jobs ,setJobs}) {
       return date.toLocaleDateString('en-US', options);
     }
 
+    function getOptionBackground(value) {
+      switch (value) {
+        case 'Applied':
+          return 'green.100';
+        case 'Rejected':
+          return 'red.100';
+        case 'Callback':
+          return 'blue.100';
+        case 'R/A':
+          return 'yellow.100';
+        default:
+          return 'white';
+      }
+    }
+
     useEffect(() => {
       console.log(jobs,"Update state in joblist component"); // Log the jobs prop
     }, [jobs]);
 
     const tableCustomStyle = {fontSize: "0.8em",td:{padding: "0.1em"}}
     const textBreakStyle = {whiteSpace:'normal',wordBreak:'break-word',textAlign:'center'}
-    const customSelectStyle = {fontSize: "0.85em"}
+    const customSelectStyle = {fontSize: "0.85em", padding: "0.25em"}
 
       return (
           <TableContainer maxWidth="50%" >
@@ -85,8 +117,12 @@ export default function JobList ({ jobs ,setJobs}) {
                     <Td sx={textBreakStyle}>{job.jobPosition}</Td>
                     <Td sx={textBreakStyle} >{formatDate(job.dateApplied)}</Td>
                     <Td sx={textBreakStyle}>
-                      <Select value={job.status} sx={customSelectStyle}>
-                        <option value='Applied'>Applied</option>
+                      <Select 
+                          value={job.status} 
+                          sx={{...customSelectStyle,background:getOptionBackground(job.status)}}
+                          onChange={(e)=>handleUpdateStatus(job._id,e.target.value)}
+                      >
+                        <option value='Applied' style={{color:"green.500"}}>Applied</option>
                         <option value='Rejected'>Rejected</option>
                         <option value='Callback'>Callback</option>
                         <option value='R/A'>R/A</option>
@@ -95,7 +131,7 @@ export default function JobList ({ jobs ,setJobs}) {
                     {/* <Td>{job.status}</Td> */}
                     <Td sx={textBreakStyle}>{formatDate(job.responseDate)}</Td>
                     <Td sx={textBreakStyle}>{job.daysSince}</Td>
-                    <Td>  <IconButton size="xs" variant="outline" aria-label="Delete" icon={<DeleteIcon/>} onClick = {()=> handleSubmit(job)}/></Td>
+                    <Td>  <IconButton size="xs" variant="outline" aria-label="Delete" icon={<DeleteIcon/>} onClick = {()=> handleDelete(job)}/></Td>
                   
                     {/* <Td>{job.notes}</Td> */}
                 </Tr>

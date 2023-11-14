@@ -2,7 +2,7 @@ import { Stack, HStack, VStack } from '@chakra-ui/react'
 import { Button, ButtonGroup } from '@chakra-ui/react'
 import { Input } from '@chakra-ui/react'
 import { useState,useEffect } from 'react';
-import { Flex, Spacer } from '@chakra-ui/react'
+import { Flex} from '@chakra-ui/react'
 
 export default function AddJob({addJob}) { 
     const [companyName, setCompanyName] = useState('');
