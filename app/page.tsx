@@ -24,6 +24,7 @@ export default function Home() {
     setJobs(prevJobs => [...prevJobs, newJob]);
   };
 
+  // Test change
   return (
     <body>
       <Providers>
