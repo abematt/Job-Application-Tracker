@@ -10,7 +10,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   switch (method) {
     case "GET":
       try {
-        const jobs = await Job.find({}).sort({ daysSince : 1 });
+        const jobs = await Job.find({}).sort({ dateApplied : -1 });
 
         res.status(200).json({ success: true, data: jobs });
       } catch (error) {

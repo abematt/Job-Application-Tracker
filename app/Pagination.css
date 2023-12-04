@@ -1,0 +1,28 @@
+.pagination {
+    display: flex;
+    justify-content: center;
+    padding: 20px 0;
+  }
+  
+  .pagination__link {
+    margin: 0 20px;
+    cursor: pointer;
+  }
+  
+  .pagination__link--active {
+    font-weight: bold;
+  }
+    li {
+    list-style: none;
+    padding: 5px;
+    }
+
+    li:hover {
+        color: blue;
+    }
+    
+  
+  .pagination__link--disabled {
+    color: #ccc;
+    cursor: not-allowed;
+  }
