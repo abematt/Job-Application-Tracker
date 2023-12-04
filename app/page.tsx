@@ -10,8 +10,19 @@ import JobList from './components/JobList'
 import ModalButton from './components/ModalAddButton'
 
 export default function Home() {
-  const [jobs, setJobs] = useState([]);
-  
+  interface Job {
+    _id: string;
+    companyName: string;
+    jobPosition: string;
+    dateApplied: string;
+    status: string;
+    responseDate: string;
+    daysSince: number;
+    notes: string;
+  }
+
+  const [jobs, setJobs] = useState<Job[]>([]);
+
   useEffect(() => { 
         
     fetch('/api/jobList')
@@ -20,7 +31,8 @@ export default function Home() {
     .catch(error => console.log(error));
   }, []);
 
-  const addJob = (newJob) => {
+
+  const addJob = (newJob: Job) => {
     setJobs(prevJobs => [...prevJobs, newJob]);
   };
 

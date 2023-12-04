@@ -15,8 +15,8 @@ import { useEffect, useState } from 'react';
 
 import AddJob from './jobAddForm'
 
-export default function ModalButton( {addJob} ) 
-{
+export default function ModalButton({ addJob }: { addJob: (...args: any[]) => void }) 
+  {
     
     const [isOpen, setIsOpen] = useState(false);
     const [isClient, setIsClient] = useState(false);

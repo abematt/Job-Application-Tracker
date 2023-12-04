@@ -4,7 +4,7 @@ import { Input } from '@chakra-ui/react'
 import { useState,useEffect } from 'react';
 import { Flex} from '@chakra-ui/react'
 
-export default function AddJob({addJob}) { 
+export default function AddJob({ addJob }: { addJob: (job: any) => void }) { 
     const [companyName, setCompanyName] = useState('');
     const [jobPosition, setJobPosition] = useState('');
     const [dateApplied, setDateApplied] = useState('');
