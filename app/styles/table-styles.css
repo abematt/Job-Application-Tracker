@@ -1,0 +1,59 @@
+.jobContainer {
+  margin: 5em auto;
+  padding: 10px;
+  width: 50%;
+}
+.tableCustomStyle {
+    font-size: 0.8em;
+    border-collapse: separate;
+    border-spacing: 0 0.5rem;
+  }
+  
+  .tableCustomStyle td {
+    padding: 0.1em;
+    width: 1em; /* Adjust this value as needed */
+    height: 1em;
+    white-space: pre-wrap;
+    overflow: hidden;
+  }
+
+  .tableCustomStyle tbody tr:hover {
+    background-color: #ebf8ff; /* Change this to the color you want */
+  }
+  
+  .textBreakStyle {
+    white-space: normal;
+    word-break: break-word;
+    text-align: center;
+  }
+  
+  .jobStatus {
+    font-size: 0.85em;
+    padding: 0.25em;
+  }
+
+  .jobStatusApplied {
+    background-color: #C6F6D5;
+  }
+  
+  .jobStatusRejected {
+    background-color: #FED7D7;
+  }
+  
+  .jobStatusCallback {
+    background-color: #bee3f8;
+  }
+
+.tableRow{
+  border: 5px solid #1a1a1a; 
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.15);
+  border-collapse: separate;
+}
+
+.sortable:hover {
+  cursor: pointer;
+}
+
+Select{
+  text-align: center;
+}

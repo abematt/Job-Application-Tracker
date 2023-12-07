@@ -9,6 +9,8 @@ import { useEffect, useState } from 'react';
 import JobList from './components/JobList'
 import ModalButton from './components/ModalAddButton'
 
+import './styles/table-styles.css'; 
+
 export default function Home() {
   interface Job {
     _id: string;
@@ -22,12 +24,34 @@ export default function Home() {
   }
 
   const [jobs, setJobs] = useState<Job[]>([]);
+  
+  const calculateDaysSince = (job: Job) => {
+    const currentDate = new Date();
+    let applicationDate = new Date(job.dateApplied);
+    let responseDate = new Date(job.responseDate);
+  
+    let differenceInMilliseconds;
+    if (job.status === 'Applied' || responseDate.getTime() === applicationDate.getTime()) {
+      differenceInMilliseconds = currentDate.getTime() - applicationDate.getTime();
+    } else {
+      differenceInMilliseconds = responseDate.getTime() - applicationDate.getTime();
+    }
+  
+    const differenceInDays = Math.floor(differenceInMilliseconds / (1000 * 60 * 60 * 24));
+    return differenceInDays;
+  };
 
   useEffect(() => { 
         
     fetch('/api/jobList')
     .then(response => response.json())
-    .then(data => setJobs(data.data))
+    .then(data => {
+      const jobsWithDaysSince = data.data.map((job: Job) => {
+        const daysSince = calculateDaysSince(job);
+        return { ...job, daysSince };
+    });
+    setJobs(jobsWithDaysSince);
+  })
     .catch(error => console.log(error));
   }, []);
 
@@ -50,9 +74,9 @@ export default function Home() {
               </TabList>
             </Tabs>
           </Flex>
-          <Flex justify="center">
+          <div className="jobContainer">
             <JobList jobs={jobs} setJobs={setJobs}/>
-          </Flex>
+          </div>
         </Flex>
       </Providers>
     </body>

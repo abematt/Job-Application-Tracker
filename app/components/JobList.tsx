@@ -12,7 +12,7 @@ import {
   TableContainer,
 } from "@chakra-ui/react";
 
-import { DeleteIcon } from "@chakra-ui/icons";
+import { DeleteIcon,UpDownIcon } from "@chakra-ui/icons";
 import { IconButton } from "@chakra-ui/react";
 import { Select } from "@chakra-ui/react";
 
@@ -20,6 +20,7 @@ import React, { useEffect, useState } from "react";
 import ReactPaginate from "react-paginate";
 
 import '../Pagination.css';
+import '../styles/table-styles.css';
 
 interface Job {
   _id: string;
@@ -34,6 +35,8 @@ interface Job {
 
 export default function JobList({ jobs, setJobs }: { jobs: Job[]; setJobs: React.Dispatch<React.SetStateAction<Job[]>> }) {
   const [currentPage, setCurrentPage] = React.useState(0);
+  const [sortDirection, setSortDirection] = useState('asc');
+  
   const PER_PAGE = 10;
 
   function handlePageClick({ selected: selectedPage }: { selected: number }) {
@@ -44,12 +47,15 @@ export default function JobList({ jobs, setJobs }: { jobs: Job[]; setJobs: React
 
   const pageCount = Math.ceil(jobs.length / PER_PAGE);
 
+  
   // Update API call
   const handleUpdateStatus = async (id: string, status: string) => {
+    const today = new Date();
+    const formattedDate = status === 'Applied' ? '' : today;
     const response = await fetch("/api/jobList", {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ id: id, status: status }),
+      body: JSON.stringify({ id: id, status: status, responseDate: formattedDate }),
     });
 
     if (!response.ok) {
@@ -57,9 +63,7 @@ export default function JobList({ jobs, setJobs }: { jobs: Job[]; setJobs: React
     }
 
     const updatedJob = await response.json();
-    setJobs(
-      jobs.map((job) => (job._id === id ? { ...job, status: status } : job))
-    );
+    setJobs(jobs.map(job => job._id === id ? updatedJob.data : job));
     // addJob(updatedJob.data);
   };
 
@@ -90,37 +94,29 @@ export default function JobList({ jobs, setJobs }: { jobs: Job[]; setJobs: React
     }
   }
 
-  function getOptionBackground(value: string) {
-    switch (value) {
-      case "Applied":
-        return "green.100";
-      case "Rejected":
-        return "red.100";
-      case "Callback":
-        return "blue.100";
-      case "R/A":
-        return "yellow.100";
-      default:
-        return "white";
-    }
-  }
+  const sortData = (column) => {
+    let direction = sortDirection === 'asc' ? 'desc' : 'asc';
+    setSortDirection(direction);
+  
+    let sortedJobs = [...jobs].sort((a, b) => {
+      if (typeof a[column] === 'string') {
+        return direction === 'asc' 
+          ? a[column].localeCompare(b[column]) 
+          : b[column].localeCompare(a[column]);
+      } else {
+        return direction === 'asc' 
+          ? a[column] - b[column] 
+          : b[column] - a[column];
+      }
+    });
+  
+    setJobs(sortedJobs);
+  };
 
   useEffect(() => {
     console.log(jobs, "Update state in joblist component"); // Log the jobs prop
   }, [jobs]);
 
-  const tableCustomStyle = { 
-    fontSize: "0.8em", 
-    width: "100%",
-    height: '500px',
-    td: { padding: "0.1em" }
-  };
-  const textBreakStyle = {
-    whiteSpace: "normal",
-    wordBreak: "break-word",
-    textAlign: "center",
-  };
-  const customSelectStyle = { fontSize: "0.85em", padding: "0.25em" };
   const currentPageData = jobs
     .slice(offset, offset + PER_PAGE)
     .map(
@@ -134,17 +130,14 @@ export default function JobList({ jobs, setJobs }: { jobs: Job[]; setJobs: React
         daysSince: number;
         notes: string;
       }) => (
-        <Tr key={job._id}>
-          <Td sx={textBreakStyle}>{job.companyName}</Td>
-          <Td sx={textBreakStyle}>{job.jobPosition}</Td>
-          <Td sx={textBreakStyle}>{formatDate(job.dateApplied)}</Td>
-          <Td sx={textBreakStyle}>
+        <Tr className="tableRow" key={job._id}>
+          <Td className="textBreakStyle">{job.companyName}</Td>
+          <Td className="textBreakStyle">{job.jobPosition}</Td>
+          <Td className="textBreakStyle">{formatDate(job.dateApplied)}</Td>
+          <Td className="textBreakStyle">
             <Select
               value={job.status}
-              sx={{
-                ...customSelectStyle,
-                background: getOptionBackground(job.status),
-              }}
+              className={`jobStatus jobStatus${job.status}`}
               onChange={(e) => handleUpdateStatus(job._id, e.target.value)}
             >
               <option value="Applied" style={{ color: "green.500" }}>
@@ -156,9 +149,9 @@ export default function JobList({ jobs, setJobs }: { jobs: Job[]; setJobs: React
             </Select>
           </Td>
           {/* <Td>{job.status}</Td> */}
-          <Td sx={textBreakStyle}>{formatDate(job.responseDate)}</Td>
-          <Td sx={textBreakStyle}>{job.daysSince}</Td>
-          <Td>
+          <Td className="textBreakStyle">{formatDate(job.responseDate)}</Td>
+          <Td className="textBreakStyle">{job.daysSince}</Td>
+          <Td className="textBreakStyle">
             {" "}
             <IconButton
               size="xs"
@@ -173,23 +166,26 @@ export default function JobList({ jobs, setJobs }: { jobs: Job[]; setJobs: React
         </Tr>
       )
     );
+
+    
   return (
     <TableContainer >
       <Table
         colorScheme="messenger"
-        variant="simple"
+        variant="unstyled"
         size="sm"
-        sx={tableCustomStyle}
+        className='tableCustomStyle'
       >
         <TableCaption>Job Application Tracking</TableCaption>
         <Thead>
           <Tr>
-            <Th sx={textBreakStyle}>Company Name</Th>
-            <Th sx={textBreakStyle}>Job Position</Th>
-            <Th isNumeric>Date Applied</Th>
-            <Th>Status</Th>
-            <Th>Response Date</Th>
-            <Th>Days Since</Th>
+            <Th className="textBreakStyle">Company Name</Th>
+            <Th className="textBreakStyle">Job Position</Th>
+            <Th className="textBreakStyle sortable" onClick={() => {sortData('dateApplied')}}>Date Applied<UpDownIcon/></Th>
+            <Th className="textBreakStyle sortable" onClick={() => {sortData('status')}}>Status<UpDownIcon/></Th>
+            <Th className="textBreakStyle" onClick={() => {sortData('responseDate')}}>Response Date</Th>
+            <Th className="textBreakStyle sortable" onClick={() => {sortData('daysSince')}}>Days Since<UpDownIcon/></Th>
+            <Th className="textBreakStyle">Delete</Th>
             {/* <Th>Notes</Th> */}
           </Tr>
         </Thead>
