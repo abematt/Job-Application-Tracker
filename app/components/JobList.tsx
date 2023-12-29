@@ -12,15 +12,15 @@ import {
   TableContainer,
 } from "@chakra-ui/react";
 
-import { DeleteIcon,UpDownIcon } from "@chakra-ui/icons";
+import { DeleteIcon, UpDownIcon } from "@chakra-ui/icons";
 import { IconButton } from "@chakra-ui/react";
 import { Select } from "@chakra-ui/react";
 
 import React, { useEffect, useState } from "react";
 import ReactPaginate from "react-paginate";
 
-import '../Pagination.css';
-import '../styles/table-styles.css';
+import "../Pagination.css";
+import "../styles/table-styles.css";
 
 interface Job {
   _id: string;
@@ -33,10 +33,16 @@ interface Job {
   notes: string;
 }
 
-export default function JobList({ jobs, setJobs }: { jobs: Job[]; setJobs: React.Dispatch<React.SetStateAction<Job[]>> }) {
+export default function JobList({
+  jobs,
+  setJobs,
+}: {
+  jobs: Job[];
+  setJobs: React.Dispatch<React.SetStateAction<Job[]>>;
+}) {
   const [currentPage, setCurrentPage] = React.useState(0);
-  const [sortDirection, setSortDirection] = useState('asc');
-  
+  const [sortDirection, setSortDirection] = useState("asc");
+
   const PER_PAGE = 10;
 
   function handlePageClick({ selected: selectedPage }: { selected: number }) {
@@ -47,15 +53,18 @@ export default function JobList({ jobs, setJobs }: { jobs: Job[]; setJobs: React
 
   const pageCount = Math.ceil(jobs.length / PER_PAGE);
 
-  
   // Update API call
   const handleUpdateStatus = async (id: string, status: string) => {
     const today = new Date();
-    const formattedDate = status === 'Applied' ? '' : today;
+    const formattedDate = status === "Applied" ? "" : today;
     const response = await fetch("/api/jobList", {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ id: id, status: status, responseDate: formattedDate }),
+      body: JSON.stringify({
+        id: id,
+        status: status,
+        responseDate: formattedDate,
+      }),
     });
 
     if (!response.ok) {
@@ -63,7 +72,7 @@ export default function JobList({ jobs, setJobs }: { jobs: Job[]; setJobs: React
     }
 
     const updatedJob = await response.json();
-    setJobs(jobs.map(job => job._id === id ? updatedJob.data : job));
+    setJobs(jobs.map((job) => (job._id === id ? updatedJob.data : job)));
     // addJob(updatedJob.data);
   };
 
@@ -86,30 +95,34 @@ export default function JobList({ jobs, setJobs }: { jobs: Job[]; setJobs: React
 
   function formatDate(dateString: string) {
     const date = new Date(dateString);
-    if (isNaN(date.getTime())) { // check if date is valid
-      return 'No';
-    } else  {
-      const options: Intl.DateTimeFormatOptions = { month: "long", day: "numeric" };
-    return date.toLocaleDateString("en-US", options);
+    if (isNaN(date.getTime())) {
+      // check if date is valid
+      return "No";
+    } else {
+      const options: Intl.DateTimeFormatOptions = {
+        month: "long",
+        day: "numeric",
+      };
+      return date.toLocaleDateString("en-US", options);
     }
   }
 
   const sortData = (column) => {
-    let direction = sortDirection === 'asc' ? 'desc' : 'asc';
+    let direction = sortDirection === "asc" ? "desc" : "asc";
     setSortDirection(direction);
-  
+
     let sortedJobs = [...jobs].sort((a, b) => {
-      if (typeof a[column] === 'string') {
-        return direction === 'asc' 
-          ? a[column].localeCompare(b[column]) 
+      if (typeof a[column] === "string") {
+        return direction === "asc"
+          ? a[column].localeCompare(b[column])
           : b[column].localeCompare(a[column]);
       } else {
-        return direction === 'asc' 
-          ? a[column] - b[column] 
+        return direction === "asc"
+          ? a[column] - b[column]
           : b[column] - a[column];
       }
     });
-  
+
     setJobs(sortedJobs);
   };
 
@@ -167,24 +180,54 @@ export default function JobList({ jobs, setJobs }: { jobs: Job[]; setJobs: React
       )
     );
 
-    
   return (
-    <TableContainer >
+    <TableContainer>
       <Table
         colorScheme="messenger"
         variant="unstyled"
         size="sm"
-        className='tableCustomStyle'
+        className="tableCustomStyle"
       >
         <TableCaption>Job Application Tracking</TableCaption>
         <Thead>
           <Tr>
             <Th className="textBreakStyle">Company Name</Th>
             <Th className="textBreakStyle">Job Position</Th>
-            <Th className="textBreakStyle sortable" onClick={() => {sortData('dateApplied')}}>Date Applied<UpDownIcon/></Th>
-            <Th className="textBreakStyle sortable" onClick={() => {sortData('status')}}>Status<UpDownIcon/></Th>
-            <Th className="textBreakStyle" onClick={() => {sortData('responseDate')}}>Response Date</Th>
-            <Th className="textBreakStyle sortable" onClick={() => {sortData('daysSince')}}>Days Since<UpDownIcon/></Th>
+            <Th
+              className="textBreakStyle sortable"
+              onClick={() => {
+                sortData("dateApplied");
+              }}
+            >
+              Date Applied
+              <UpDownIcon />
+            </Th>
+            <Th
+              className="textBreakStyle sortable"
+              onClick={() => {
+                sortData("status");
+              }}
+            >
+              Status
+              <UpDownIcon />
+            </Th>
+            <Th
+              className="textBreakStyle"
+              onClick={() => {
+                sortData("responseDate");
+              }}
+            >
+              Response Date
+            </Th>
+            <Th
+              className="textBreakStyle sortable"
+              onClick={() => {
+                sortData("daysSince");
+              }}
+            >
+              Days Since
+              <UpDownIcon />
+            </Th>
             <Th className="textBreakStyle">Delete</Th>
             {/* <Th>Notes</Th> */}
           </Tr>
