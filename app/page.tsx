@@ -1,13 +1,17 @@
 'use client'
 
+
 import { Flex, } from '@chakra-ui/react'
 import { Tabs, TabList, Tab} from '@chakra-ui/react'
+
+import { Link } from '@chakra-ui/next-js'
 
 import { Providers } from './providers';
 import { useEffect, useState } from 'react';
 
 import JobList from './components/JobList'
 import ModalButton from './components/ModalAddButton'
+import StatisticsBasic from './components/statisticsBasic';
 
 import './styles/table-styles.css'; 
 
@@ -57,26 +61,24 @@ export default function Home() {
 
 
   const addJob = (newJob: Job) => {
-    setJobs(prevJobs => [...prevJobs, newJob]);
+    setJobs(prevJobs => [newJob,...prevJobs]);
   };
 
-  // Test change
   return (
     <body>
       <Providers>
         <Flex justify="center" direction="column">
           <Flex justify="center">
-            <Tabs>
-              <TabList>
-                <Tab>Job Tracker</Tab>
-                <Tab>Statistics</Tab>
-                <ModalButton addJob={addJob}/>
-              </TabList>
-            </Tabs>
+              <StatisticsBasic jobs={jobs}/>
           </Flex>
-          <div className="jobContainer">
+          <Flex justify="center">
+            {/* <Link href="/statistics">Statistics</Link> */}
+          <ModalButton addJob={addJob}/>
+          </Flex>
+          <div className="jobContainer" >
             <JobList jobs={jobs} setJobs={setJobs}/>
           </div>
+          
         </Flex>
       </Providers>
     </body>

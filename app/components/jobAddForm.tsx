@@ -50,7 +50,7 @@ export default function AddJob({ addJob }: { addJob: (job: any) => void }) {
             {/* <Input placeholder='Date Applied' value={dateApplied} onChange={(e) => setDateApplied(e.target.value)}/> */}
         </HStack>
         <Flex justify='center'>
-            <Button colorScheme='blue' onClick={handleSubmit} w="25%" >Add Job</Button>
+            <Button onClick={handleSubmit} w="25%" >Add Job</Button>
         </Flex>
         </Stack>
 
