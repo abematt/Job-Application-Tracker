@@ -4,6 +4,8 @@
 
 I aimed to challenge myself in gaining more experience with Typescript, Next.js, and practicing CRUD operations while working with MongoDB. Scripting these changes would make my workflow more efficient compared to the time-consuming Google Sheets process.
 
+![](https://github.com/abematt/Job-Application-Tracker/blob/main/scrnli_12_29_2023_9-39-35%20AM.gif)
+
 ## Features
 
 With Job Tracker, you can:
