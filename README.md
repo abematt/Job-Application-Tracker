@@ -6,6 +6,7 @@ I aimed to challenge myself in gaining more experience with Typescript, Next.js,
 
 ![](https://github.com/abematt/Job-Application-Tracker/blob/main/scrnli_12_29_2023_9-39-35%20AM.gif)
 
+Deployed on AWS EC2: https://184.72.77.153/ (Needs to be updated)
 ## Features
 
 With Job Tracker, you can:
